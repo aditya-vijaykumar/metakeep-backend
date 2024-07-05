@@ -9,6 +9,7 @@ import Joi from "joi";
 import axios from "axios";
 import { randomString } from "../utils/randomString";
 import { sendMailToUser } from "../utils/nodeMailer";
+import { EmailSenderSingleton } from "../utils/EmailSenderSingleton";
 
 const BCN_TOKEN_ADDRESS = "0xc6E5740786236Ae58092f07b62B120753eB428d1";
 
@@ -181,12 +182,14 @@ export const transferTestTokens = async (req: Request, res: Response) => {
         status: string;
         consentToken: string;
       } = transferTokens.data;
-      sendMailToUser({
-        receiverEmail: req.body.toEmail,
-        amount: `${req.body.amount}`,
-        senderEmail: req.body.fromEmail,
-      });
-
+      EmailSenderSingleton.getInstance().setNewRequest(
+        transferResponseData.consentToken,
+        {
+          receiverEmail: req.body.toEmail,
+          amount: `${req.body.amount}`,
+          senderEmail: req.body.fromEmail,
+        }
+      );
       return responseSuccess(
         res,
         200,
@@ -200,6 +203,50 @@ export const transferTestTokens = async (req: Request, res: Response) => {
         transferTokens.data.status ?? "API UNAVAILABLE"
       );
     }
+  } catch (error: any) {
+    console.error(functionName, {}, "API", error.message, req);
+    return internalServerError(res, error);
+  }
+};
+
+export const emailOnTransferTokens = async (req: Request, res: Response) => {
+  const functionName = "emailOnTransferTokens";
+  try {
+    const schema = Joi.object({
+      consentToken: Joi.string().required(),
+    });
+
+    const requestValidation = schema.validate(req.body);
+    if (requestValidation.error) {
+      console.error(
+        functionName,
+        {},
+        "",
+        requestValidation.error.details[0].context?.value,
+        req
+      );
+      return responseInvalidArgumentsError(res, requestValidation);
+    }
+    const transferInfo = EmailSenderSingleton.getInstance().getInfoForToken(
+      req.body.consentToken
+    );
+
+    if (
+      !EmailSenderSingleton.getInstance().checkIfRequestExistsForToken(
+        req.body.consentToken
+      ) ||
+      !transferInfo
+    ) {
+      return requestFailed(res, 400, "Consent Token wasn't registered.");
+    }
+    await sendMailToUser(transferInfo);
+
+    return responseSuccess(
+      res,
+      200,
+      { success: true, data: null },
+      "Successfully sent an email to the receiver."
+    );
   } catch (error: any) {
     console.error(functionName, {}, "API", error.message, req);
     return internalServerError(res, error);

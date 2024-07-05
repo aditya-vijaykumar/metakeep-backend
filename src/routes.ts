@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import {
+  emailOnTransferTokens,
   getBalances,
   mintTestTokens,
   transferTestTokens,
@@ -14,5 +15,6 @@ router.get("/hello", (req: Request, res: Response) => {
 router.post("/balance", getBalances);
 router.post("/mint", mintTestTokens);
 router.post("/transfer", transferTestTokens);
+router.post("/confirm-transfer", emailOnTransferTokens);
 
 export default router;
