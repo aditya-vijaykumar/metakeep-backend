@@ -25,7 +25,8 @@ app.use(
 const corsOptions = {
   origin: function (origin: any, callback: any) {
     const whitelistedOrigins = [
-        "https://banza-ec2bc.web.app"
+        "https://banza-ec2bc.web.app",
+        "https://alpha.banza.xyz"
     ];
     if (process.env.NODE_ENV == "dev") {
       whitelistedOrigins.push("http://localhost:3000");
