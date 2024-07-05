@@ -140,12 +140,9 @@ const htmlTemplate = (senderEmail: string, amount: string) => {
               margin-right: 1rem;    font-size: 14px;  line-height: 24px;  font-family: 'Lato', sans-serif;  text-align: center;">Sign in to your Banza wallet with this email to access it now! </p>
             <p style="margin-top: 2rem;
               margin-right: 1rem;      line-height: 24px;  font-family: 'Lato', sans-serif;  text-align: center;">
-              <a target="_blank" href="https://alpha.banza.xyz" style="text-align: center; background-color: #ff8f00; border: none; color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; text-decoration: none;
-              hover {
-              background-color: transparent;
-              border: 2px solid #ff8f00;
-              }
-              "> Open Banza </a>
+              <button style="text-align: center; background-color: #ff8f00; border: none; color: white; padding: 15px 20px; border-radius: 5px; cursor: pointer; 
+              "> <a target="_blank" href="https://alpha.banza.xyz" style="text-align: center; color: white; text-decoration: none;
+              "> Open Banza </a> </button>
             </p>
           </td>
         </tr>
