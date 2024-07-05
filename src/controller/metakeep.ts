@@ -240,6 +240,7 @@ export const emailOnTransferTokens = async (req: Request, res: Response) => {
       return requestFailed(res, 400, "Consent Token wasn't registered.");
     }
     await sendMailToUser(transferInfo);
+    EmailSenderSingleton.getInstance().unsetRequest(req.body.consentToken);
 
     return responseSuccess(
       res,
