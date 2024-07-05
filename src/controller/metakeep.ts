@@ -8,6 +8,7 @@ import {
 import Joi from "joi";
 import axios from "axios";
 import { randomString } from "../utils/randomString";
+import { sendMailToUser } from "../utils/nodeMailer";
 
 const BCN_TOKEN_ADDRESS = "0xc6E5740786236Ae58092f07b62B120753eB428d1";
 
@@ -180,7 +181,12 @@ export const transferTestTokens = async (req: Request, res: Response) => {
         status: string;
         consentToken: string;
       } = transferTokens.data;
-      //TODO: Send email to receiver
+      sendMailToUser({
+        receiverEmail: req.body.toEmail,
+        amount: `${req.body.amount}`,
+        senderEmail: req.body.fromEmail,
+      });
+
       return responseSuccess(
         res,
         200,
