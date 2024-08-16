@@ -6,10 +6,12 @@ export const sendMailToUser = async ({
   receiverEmail,
   senderEmail,
   amount,
+  tokenSymbol
 }: {
   receiverEmail: string;
   senderEmail: string;
   amount: string;
+  tokenSymbol: string;
 }) => {
   const functionName = "sendMailToUser";
   try {
@@ -18,7 +20,7 @@ export const sendMailToUser = async ({
       return responseFunction(false, null, nodeMailerConfig.message);
     }
 
-    const htmlData = htmlTemplate(senderEmail, amount);
+    const htmlData = htmlTemplate(senderEmail, amount, tokenSymbol);
 
     const fromEmail = `<${nodeMailerConfig.data.sourceEmail}>`;
     const mailOptions: {
@@ -88,7 +90,7 @@ const getNodeMailerConfig = async () => {
   }
 };
 
-const htmlTemplate = (senderEmail: string, amount: string) => {
+const htmlTemplate = (senderEmail: string, amount: string, tokenSymbol: string) => {
   return `
     <body>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -135,7 +137,7 @@ const htmlTemplate = (senderEmail: string, amount: string) => {
                   text-align: center;
                 "> Hello! </h3>
             <p style="margin-left: 1rem;
-              margin-right: 1rem;    font-size: 14px;  line-height: 24px;  font-family: 'Lato', sans-serif;  text-align: center;">You have just received crypto funds on the fly! ${senderEmail} has just sent you ${amount} BCN crypto to your wallet. </p>
+              margin-right: 1rem;    font-size: 14px;  line-height: 24px;  font-family: 'Lato', sans-serif;  text-align: center;">You have just received crypto funds on the fly! ${senderEmail} has just sent you ${amount} ${tokenSymbol} crypto to your wallet. </p>
             <p style="margin-left: 1rem;
               margin-right: 1rem;    font-size: 14px;  line-height: 24px;  font-family: 'Lato', sans-serif;  text-align: center;">Sign in to your Banza wallet with this email to access it now! </p>
             <p style="margin-top: 2rem;

@@ -17,7 +17,8 @@
     "express": "^4.19.2",
     "joi": "^17.13.3",
     "nodemailer": "^6.9.14",
-    "nodemailer-smtp-transport": "^2.7.4"
+    "nodemailer-smtp-transport": "^2.7.4",
+    "web3": "^4.11.1"
   },
   "devDependencies": {
     "@types/body-parser": "^1",
